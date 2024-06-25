@@ -21,3 +21,13 @@ class Amenity(BaseModel, Base):
                   ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
     place_amenities = relationship("Place", secondary="place_amenity",
                                    viewonly=False)
+
+    def __init__(self, *args, **kwargs):
+        """Initialize an Amenity instance."""
+        super().__init__(*args, **kwargs)
+        self.validate_name()
+
+    def validate_name(self):
+        """Validate the name attribute for non-DB storage."""
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db' and not self.name:
+            raise ValueError("name attribute cannot be empty")

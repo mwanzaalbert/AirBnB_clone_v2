@@ -7,9 +7,8 @@ from io import StringIO
 import sys
 from unittest.mock import patch
 import os
-import sqlalchemy
 import MySQLdb
-from models import storage, User
+from models import storage
 
 
 def clear_stream(stream):
@@ -122,3 +121,7 @@ class TestHBNBCommand(unittest.TestCase):
             self.assertEqual(int(cnt), prev_count + 1)
             cursor.close()
             dbc.close()
+
+
+if __name__ == "__main__":
+    unittest.main()

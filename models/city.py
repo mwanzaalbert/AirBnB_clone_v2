@@ -1,22 +1,36 @@
 #!/usr/bin/python3
-"""City Module for HBNB project."""
-from sqlalchemy import Column, ForeignKey, String
+""" City Module for HBNB project."""
+import os
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-from models.base_model import Base, BaseModel
+from models.base_model import BaseModel, Base
+from models.place import Place
 
 
 class City(BaseModel, Base):
-    """Representation of a city.
+    """Represent a city data set."""
 
-    Inherits from SQLAlchemy Base and links to the MySQL table cities.
-    Attributes_:
-        __tablename__ (str): The name of the MySQL table to store Cities.
-        name (sqlalchemy String): The name of the City.
-        state_id (sqlalchemy String): The state id of the City.
-    """
+    __tablename__ = 'cities'
 
-    __tablename__ = "cities"
-
+    # Define state_id and name attributes regardless of storage type
+    state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     name = Column(String(128), nullable=False)
-    state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
-    places = relationship("Place", backref="cities", cascade="delete")
+
+    # Define places relationship for database storage
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        places = relationship(
+            'Place', backref='cities', cascade='all, delete'
+        )
+
+    def __init__(self, *args, **kwargs):
+        """Initialize a City instance."""
+        super().__init__(*args, **kwargs)
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            self.validate_attributes()
+
+    def validate_attributes(self):
+        """Validate the state_id and name attributes for non-DB storage."""
+        if not self.state_id:
+            raise ValueError("state_id attribute cannot be empty")
+        if not self.name:
+            raise ValueError("name attribute cannot be empty")
