@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
         class_match = re.match(name_pattern, args)
         obj_kwargs = {}
 
-        if class_match:
+        if class_match is not None:
             class_name = class_match.group('name')
             params_str = args[len(class_name):].strip()
             params = params_str.split(' ')
@@ -261,14 +261,15 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)
+
 
     def help_all(self):
         """Help information for the all command."""
@@ -278,15 +279,8 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances."""
         count = 0
-        if args:
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k in storage._FileStorage__objects.keys():
-                if k.split('.')[0] == args:
-                    count += 1
-        else:
-            for k in storage._FileStorage__objects.keys():
+        for k, v in storage.all().items():
+            if args == k.split('.')[0]:
                 count += 1
         print(count)
 
