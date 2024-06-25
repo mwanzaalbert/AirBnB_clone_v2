@@ -21,8 +21,7 @@ class TestReview(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.place_id),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Place ID should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_user_id(self):
@@ -30,8 +29,7 @@ class TestReview(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.user_id),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "User ID should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_text(self):
@@ -39,8 +37,7 @@ class TestReview(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.text),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Text should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     @unittest.skipIf(

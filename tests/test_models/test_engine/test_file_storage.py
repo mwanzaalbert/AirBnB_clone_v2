@@ -5,6 +5,7 @@ import unittest
 
 from models import storage
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 @unittest.skipIf(
@@ -106,5 +107,4 @@ class TestFileStorage(unittest.TestCase):
 
     def test_storage_var_created(self):
         """ FileStorage object storage created """
-        from models.engine.file_storage import FileStorage
         self.assertEqual(type(storage), FileStorage)

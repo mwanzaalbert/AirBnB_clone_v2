@@ -16,7 +16,7 @@ class TestAmenity(TestBasemodel):
         self.name = "Amenity"
         self.value = Amenity
 
-    def test_name(self):
+    def test_name2(self):
         """Test the type and default value of name."""
         new = self.value()
         self.assertEqual(type(new.name), str)

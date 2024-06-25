@@ -21,8 +21,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.city_id),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "City ID should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_user_id(self):
@@ -30,8 +29,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.user_id),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "User ID should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_name(self):
@@ -39,8 +37,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.name),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Name should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_description(self):
@@ -48,8 +45,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.description),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Description should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_number_rooms(self):
@@ -57,8 +53,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.number_rooms),
-            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Number of rooms should be int if not using DB storage"
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_number_bathrooms(self):
@@ -66,8 +61,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.number_bathrooms),
-            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Number of bathrooms should be int if not using DB storage"
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_max_guest(self):
@@ -75,8 +69,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.max_guest),
-            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Max guests should be int if not using DB storage"
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_price_by_night(self):
@@ -84,8 +77,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.price_by_night),
-            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Price by night should be int if not using DB storage"
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_latitude(self):
@@ -93,8 +85,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.latitude),
-            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Latitude should be float if not using DB storage"
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_longitude(self):
@@ -102,8 +93,7 @@ class TestPlace(TestBasemodel):
         new = self.value()
         self.assertEqual(
             type(new.longitude),
-            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Longitude should be float if not using DB storage"
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     def test_amenity_ids(self):

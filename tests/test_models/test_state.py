@@ -16,13 +16,12 @@ class TestState(TestBasemodel):
         self.name = "State"
         self.value = State
 
-    def test_name(self):
+    def test_name3(self):
         """Tests the type of name."""
         new = self.value()
         self.assertEqual(
             type(new.name),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
-            "Name should be str if not using DB storage"
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
         )
 
     @unittest.skipIf(
