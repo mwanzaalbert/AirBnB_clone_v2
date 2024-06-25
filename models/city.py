@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" City Module for HBNB project."""
+"""City Module for HBNB project."""
 import os
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
@@ -26,6 +26,8 @@ class City(BaseModel, Base):
         """Initialize a City instance."""
         super().__init__(*args, **kwargs)
         if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            self.state_id = kwargs.get('state_id', "")
+            self.name = kwargs.get('name', "")
             self.validate_attributes()
 
     def validate_attributes(self):

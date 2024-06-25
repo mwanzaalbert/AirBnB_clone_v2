@@ -21,13 +21,13 @@ class FileStorage:
     def __init__(self):
         """Initialize instance."""
         self.model_classes = {
-            'BaseModel': import_module('models.base_model').BaseModel,
-            'User': import_module('models.user').User,
-            'State': import_module('models.state').State,
-            'City': import_module('models.city').City,
-            'Amenity': import_module('models.amenity').Amenity,
-            'Place': import_module('models.place').Place,
-            'Review': import_module('models.review').Review
+            'BaseModel': BaseModel,
+            'User': User,
+            'State': State,
+            'City': City,
+            'Amenity': Amenity,
+            'Place': Place,
+            'Review': Review
         }
 
     def all(self, cls=None):
@@ -39,18 +39,14 @@ class FileStorage:
                 type. Otherwise, the __objects dictionary is returned.
         """
         if cls:
-            filtered_dict = dict()
-            for key, value in self.__objects.copy().items():
-                if type(value) is cls:
-                    filtered_dict[key] = value
-            return filtered_dict
-
+            return {k: v for k, v in self.__objects.items() if isinstance(v,
+                                                                          cls)}
         return self.__objects
 
     def new(self, obj):
         """Add new object to storage dictionary."""
         # Generate the key for the object
-        key = obj.__class__.__name__ + '.' + obj.id
+        key = f"{obj.__class__.__name__}.{obj.id}"
 
         # Update __objects dictionary with the object
         self.__objects[key] = obj
@@ -58,10 +54,7 @@ class FileStorage:
     def save(self):
         """Save storage dictionary to file."""
         with open(self.__file_path, 'w', encoding="utf-8") as f:
-            temp = dict()
-
-            for key, val in self.__objects.items():
-                temp[key] = val.to_dict()
+            temp = {k: v.to_dict() for k, v in self.__objects.items()}
 
             json.dump(temp, f)
 
@@ -70,22 +63,22 @@ class FileStorage:
         classes = self.model_classes
 
         try:
-            temp = {}
             with open(self.__file_path, 'r', encoding="utf-8") as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
-
+                data = json.load(f)
+                for k, v in data.items():
+                    cls_name = v['__class__']
+                    cls = self.model_classes.get(cls_name)
+                    if cls:
+                        self.__objects[k] = cls(**v)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
         """Remove obj from __objects."""
         if obj:
-            key = obj.to_dict()['__class__'] + '.' + obj.id
-            if key in self.__objects:
-                del self.__objects[key]
+            key = f"{obj.__class__.__name__}.{obj.id}"
+            self.__objects.pop(key, None)
 
     def close(self):
         """Call the reload method."""
-        self.reload()
+        pass

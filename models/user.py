@@ -22,20 +22,27 @@ class User(BaseModel, Base):
 
     __tablename__ = "users"
 
-    # Conditional attribute definitions based on the storage type
-    email = Column(String(128), nullable=False) if os.getenv(
-        'HBNB_TYPE_STORAGE') == 'db' else ''
-    password = Column(String(128), nullable=False) if os.getenv(
-        'HBNB_TYPE_STORAGE') == 'db' else ''
-    first_name = Column(String(128), nullable=True) if os.getenv(
-        'HBNB_TYPE_STORAGE') == 'db' else ''
-    last_name = Column(String(128), nullable=True) if os.getenv(
-        'HBNB_TYPE_STORAGE') == 'db' else ''
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        email = Column(String(128), nullable=False)
+        password = Column(String(128), nullable=False)
+        first_name = Column(String(128), nullable=True)
+        last_name = Column(String(128), nullable=True)
+        places = relationship(
+            "Place", cascade="all, delete, delete-orphan", backref="user")
+        reviews = relationship(
+            "Review", cascade="all, delete, delete-orphan", backref="user")
+    else:
+        email = ''
+        password = ''
+        first_name = ''
+        last_name = ''
 
-    # Define relationships based on the storage type
-    places = relationship("Place", cascade="all, delete, delete-orphan",
-                          backref="user") if os.getenv(
-                              'HBNB_TYPE_STORAGE') == 'db' else None
-    reviews = relationship("Review", cascade="all, delete, delete-orphan",
-                           backref="user") if os.getenv(
-                               'HBNB_TYPE_STORAGE') == 'db' else None
+    def __init__(self, *args, **kwargs):
+        """Initialize the User object."""
+        super().__init__(*args, **kwargs)
+
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            self.email = kwargs.get('email', '')
+            self.password = kwargs.get('password', '')
+            self.first_name = kwargs.get('first_name', '')
+            self.last_name = kwargs.get('last_name', '')

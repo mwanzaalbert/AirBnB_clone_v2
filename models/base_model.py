@@ -39,15 +39,15 @@ class BaseModel:
                     else:
                         setattr(self, key, value)
 
-            if not hasattr(kwargs, 'id'):
-                setattr(self, 'id', str(uuid.uuid4()))
-            if not hasattr(kwargs, 'created_at'):
+            if 'id' not in kwargs:
+                setattr(self, 'id', str(uuid4()))
+            if 'created_at' not in kwargs:
                 setattr(self, 'created_at', datetime.now())
-            if not hasattr(kwargs, 'updated_at'):
+            if 'updated_at' not in kwargs:
                 setattr(self, 'updated_at', datetime.now())
 
         else:
-            self.id = str(uuid.uuid4())
+            self.id = str(uuid4())
             self.created_at = self.updated_at = datetime.now()
 
     def save(self):

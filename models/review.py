@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-""" Review module for the HBNB project """
+"""Review module for the HBNB project."""
 import os
 from sqlalchemy import Column, ForeignKey, String
-from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 
 
@@ -22,6 +21,16 @@ class Review(BaseModel, Base):
         text = Column(
             String(1024), nullable=False
         )
-    else:
-        # For non-database storage, no need to define these attributes
-        pass
+    else:  # For non-database storage
+        place_id = ''
+        user_id = ''
+        text = ''
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the Review object."""
+        super().__init__(*args, **kwargs)
+
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            self.place_id = kwargs.get('place_id', '')
+            self.user_id = kwargs.get('user_id', '')
+            self.text = kwargs.get('text', '')

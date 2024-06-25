@@ -25,9 +25,11 @@ class Amenity(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """Initialize an Amenity instance."""
         super().__init__(*args, **kwargs)
-        self.validate_name()
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            self.name = kwargs.get('name', '')
+            self.validate_name()
 
     def validate_name(self):
         """Validate the name attribute for non-DB storage."""
-        if os.getenv('HBNB_TYPE_STORAGE') != 'db' and not self.name:
+        if not self.name:
             raise ValueError("name attribute cannot be empty")

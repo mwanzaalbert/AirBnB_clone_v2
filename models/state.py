@@ -4,7 +4,6 @@ import os
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
-from models.city import City
 
 
 class State(BaseModel, Base):
@@ -26,10 +25,12 @@ class State(BaseModel, Base):
         # Define cities property for non-database storage
         @property
         def cities(self):
-            """Returns the cities in this State."""
+            """
+            Returns the list of City instances with state_id equals.
+
+            to the current State.id.
+            """
             from models import storage
-            cities_in_state = []
-            for value in storage.all(City).values():
-                if value.state_id == self.id:
-                    cities_in_state.append(value)
-            return cities_in_state
+            from models.city import City
+            return [city for city in storage.all(
+                City).values() if city.state_id == self.id]

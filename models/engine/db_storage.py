@@ -14,7 +14,8 @@ from sqlalchemy.orm import relationship, scoped_session, sessionmaker
 
 class DBStorage:
     """A database storage engine object.
-    Attributes:
+
+    Attributes_:
         __engine (sqlalchemy.Engine): The working SQLAlchemy engine.
         __session (sqlalchemy.Session): The working SQLAlchemy session.
     """
@@ -72,10 +73,7 @@ class DBStorage:
     def delete(self, obj=None):
         """Delete obj from the current database session."""
         if obj:
-            self.__session.query(type(obj)).filter(
-                type(obj).id == obj.id).delete(
-                synchronize_session=False
-            )
+            self.__session.delete(obj)
 
     def reload(self):
         """Create all tables in the database and initialize a new session."""
