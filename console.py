@@ -1,11 +1,10 @@
 #!/usr/bin/python3
-"""Console Module ."""
+"""Console Module."""
 import os
 import sys
 import cmd
 import re
 import uuid
-
 from datetime import datetime
 from models import storage
 from models.base_model import BaseModel
@@ -21,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
     """Contains the functionality for the HBNB console."""
 
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) ' if sys.__stdin__.isatty() else '(hbnb)\n'
 
     classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
                'State': State, 'City': City, 'Amenity': Amenity,
@@ -46,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
-        # scan for general formating - i.e '.', '(', ')'
+        # scan for general formatting - i.e., '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
@@ -61,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
             if _cmd not in HBNBCommand.dot_cmds:
                 raise Exception
 
-            # if parantheses contain arguments, parse them
+            # if parentheses contain arguments, parse them
             pline = pline[pline.find('(') + 1:pline.find(')')]
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
@@ -84,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
 
-        except Exception as mess:
+        except Exception:
             pass
         finally:
             return line
@@ -97,15 +96,15 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, command):
         """Exit the HBNB console."""
-        sys.exit(0)
+        return True
 
     def help_quit(self):
-        """Print the help documentation for quit ."""
+        """Print the help documentation for quit."""
         print("Exits the program with formatting\n")
 
     def do_EOF(self, arg):
         """Handle EOF to exit program."""
-        sys.exit(0)
+        return True
 
     def help_EOF(self):
         """Print the help documentation for EOF."""
@@ -123,7 +122,7 @@ class HBNBCommand(cmd.Cmd):
         class_match = re.match(name_pattern, args)
         obj_kwargs = {}
 
-        if class_match is not None:
+        if class_match:
             class_name = class_match.group('name')
             params_str = args[len(class_name):].strip()
             params = params_str.split(' ')
@@ -182,8 +181,7 @@ class HBNBCommand(cmd.Cmd):
     def help_create(self):
         """Help information for the create method."""
         print("Creates a class of any type")
-        print("[Usage]: create <className> <param1=value1>" +
-              "<param2=value2>...\n")
+        print("[Usage]: create <className> <param1=value1> <param2=value2>...\n")
 
     def do_show(self, args):
         """Show an individual object."""
@@ -209,7 +207,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            print(storage._FileStorage__objects[key])
+            print(storage.all()[key])
         except KeyError:
             print("** no instance found **")
 
@@ -242,7 +240,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del (storage.all()[key])
+            del storage.all()[key]
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -270,7 +268,6 @@ class HBNBCommand(cmd.Cmd):
 
         print(print_list)
 
-
     def help_all(self):
         """Help information for the all command."""
         print("Shows all objects, or all of a class")
@@ -286,7 +283,7 @@ class HBNBCommand(cmd.Cmd):
 
     def help_count(self):
         """Help information for the count command."""
-        print("Usage: count <class_name>")
+        print("Usage: count <class_name>\n")
 
     def do_update(self, args):
         """Updates a certain object with new info."""
@@ -356,7 +353,7 @@ class HBNBCommand(cmd.Cmd):
         storage.all()[key].save()  # save updates to file
 
     def help_update(self):
-        """Help information for the update class"""
+        """Help information for the update command."""
         print("Updates an object with new information")
         print("Usage: update <class name> <id> <attribute name> <attribute value>\n")
 
