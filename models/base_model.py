@@ -1,12 +1,10 @@
 #!/usr/bin/python3
-"""This module defines a base class for all models in our hbnb clone."""
+"""Module defines a base class for all models in our hbnb clone."""
 import models
 from uuid import uuid4
 from datetime import datetime
+from sqlalchemy import Column, DateTime, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import String
 
 Base = declarative_base()
 
@@ -33,33 +31,46 @@ class BaseModel:
             *args (any): Unused.
             **kwargs (dict): Key/value pairs of attributes.
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = self.updated_at = datetime.utcnow()
-
         if kwargs:
             for key, value in kwargs.items():
-                if key in ("created_at", "updated_at"):
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
-                    setattr(self, key, value)
+                if key != '__class__':
+                    if key in ('created_at', 'updated_at'):
+                        setattr(self, key, datetime.fromisoformat(value))
+                    else:
+                        setattr(self, key, value)
+
+            if not hasattr(kwargs, 'id'):
+                setattr(self, 'id', str(uuid.uuid4()))
+            if not hasattr(kwargs, 'created_at'):
+                setattr(self, 'created_at', datetime.now())
+            if not hasattr(kwargs, 'updated_at'):
+                setattr(self, 'updated_at', datetime.now())
+
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
 
     def save(self):
         """Update updated_at with current time when instance is changed."""
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """Convert BaseModel instance into dict format."""
+        """Convert instance into dict format."""
         dict_copy = self.__dict__.copy()
-        dict_copy["__class__"] = str(type(self).__name__)
+        dict_copy['__class__'] = self.__class__.__name__
 
-        dict_copy['created_at'] = self.created_at.isoformat()
-        dict_copy['updated_at'] = self.updated_at.isoformat()
+        res = dict()
 
-        dict_copy.pop("_sa_instance_state", None)
+        for key, value in dict_copy.items():
+            if key != '_sa_instance_state':
+                if isinstance(value, datetime):
+                    res[key] = value.isoformat()
+                else:
+                    res[key] = value
 
-        return dict_copy
+        return res
 
     def delete(self):
         """Delete instance from storage."""
@@ -67,7 +78,5 @@ class BaseModel:
 
     def __str__(self):
         """Representation of the instance as a String."""
-        dict_copy = self.__dict__.copy()
-        dict_copy.pop("_sa_instance_state", None)
-
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, dict_copy)
+        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
+        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)

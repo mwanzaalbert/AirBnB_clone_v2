@@ -1,26 +1,25 @@
 #!/usr/bin/python3
 """Defines the DBStorage engine."""
 from os import getenv
-from models.base_model import Base
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
 from models.amenity import Amenity
 from models.city import City
-from models.place import Place
+from models.place import Place, place_amenity
 from models.review import Review
 from models.state import State
 from models.user import User
 from sqlalchemy import create_engine
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import relationship, scoped_session, sessionmaker
 
 
 class DBStorage:
-    """Represents a database storage engine.
+    """A database storage engine object.
     Attributes:
         __engine (sqlalchemy.Engine): The working SQLAlchemy engine.
         __session (sqlalchemy.Session): The working SQLAlchemy session.
     """
+
+    DB_CLASSES = [User, State, City, Amenity, Place, Review]
 
     __engine = None
     __session = None
@@ -44,19 +43,23 @@ class DBStorage:
         Return_:
             Dict of queried classes in the format <class name>.<obj id> = obj.
         """
-        if cls:
-            objs = self.__session.query(State).all()
-            objs.extend(self.__session.query(City).all())
-            objs.extend(self.__session.query(User).all())
-            objs.extend(self.__session.query(Place).all())
-            objs.extend(self.__session.query(Review).all())
-            objs.extend(self.__session.query(Amenity).all())
-        else:
-            # if type(cls) is str:
-            # cls = eval(cls)
-            objs = self.__session.query(cls)
+        queries = dict()
 
-        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
+        if cls:
+            query = self.__session.query(cls).all()
+
+            for q in query:
+                key = '{}.{}'.format(q.__class__.__name__, q.id)
+                queries[key] = q
+
+        else:
+            for class_type in self.DB_CLASSES:
+                query = self.__session.query(class_type).all()
+                for q in query:
+                    key = '{}.{}'.format(q.__class__.__name__, q.id)
+                    queries[key] = q
+
+        return queries
 
     def new(self, obj):
         """Add obj to the current database session."""
@@ -69,15 +72,19 @@ class DBStorage:
     def delete(self, obj=None):
         """Delete obj from the current database session."""
         if obj:
-            self.__session.delete(obj)
+            self.__session.query(type(obj)).filter(
+                type(obj).id == obj.id).delete(
+                synchronize_session=False
+            )
 
     def reload(self):
         """Create all tables in the database and initialize a new session."""
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
-        Session = scoped_session(session_factory)
-        self.__session = Session()
+        curr_session = scoped_session(session_factory)
+
+        self.__session = curr_session()
 
     def close(self):
         """Close the working SQLAlchemy session."""

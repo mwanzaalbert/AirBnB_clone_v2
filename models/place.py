@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-""" Place Module for HBNB project """
+"""Place Module for HBNB project."""
+import os
 import models
-from os import getenv
 from models.base_model import Base
 from models.base_model import BaseModel
 from models.amenity import Amenity
@@ -14,21 +14,21 @@ from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy.orm import relationship
 
-
-association_table = Table("place_amenity", Base.metadata,
-                          Column("place_id", String(60),
-                                 ForeignKey("places.id"),
-                                 primary_key=True, nullable=False),
-                          Column("amenity_id", String(60),
-                                 ForeignKey("amenities.id"),
-                                 primary_key=True, nullable=False))
+association_table = Table('place_amenity', Base.metadata,
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id'),
+                                 nullable=False, primary_key=True),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('amenities.id'),
+                                 nullable=False, primary_key=True)
+                          )
 
 
 class Place(BaseModel, Base):
     """Represents a Place for a MySQL database.
 
     Inherits from SQLAlchemy Base and links to the MySQL table places.
-    Attributes:
+    Attributes_:
         __tablename__ (str): The name of the MySQL table to store places.
         city_id (sqlalchemy String): The place's city id.
         user_id (sqlalchemy String): The place's user id.
@@ -42,9 +42,11 @@ class Place(BaseModel, Base):
         longitude (sqlalchemy Float): The place's longitude.
         reviews (sqlalchemy relationship): The Place-Review relationship.
         amenities (sqlalchemy relationship): The Place-Amenity relationship.
-        amenity_ids (list): An id list of all linked amenities.
+        amenity_ids (list): An id list of all associated Amenities.
     """
+
     __tablename__ = "places"
+
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     name = Column(String(128), nullable=False)
@@ -60,27 +62,29 @@ class Place(BaseModel, Base):
                              viewonly=False)
     amenity_ids = []
 
-    if getenv("HBNB_TYPE_STORAGE", None) != "db":
-        @property
-        def reviews(self):
-            """Get a list of all linked Reviews."""
-            review_list = []
-            for review in list(models.storage.all(Review).values()):
-                if review.place_id == self.id:
-                    review_list.append(review)
-            return review_list
+    @property
+    def reviews(self):
+        """Get a list of all associated Reviews."""
+        reviews_list = []
 
-        @property
-        def amenities(self):
-            """Get linked Amenities."""
-            amenity_list = []
-            for amenity in list(models.storage.all(Amenity).values()):
-                if amenity.id in self.amenity_ids:
-                    amenity_list.append(amenity)
-            return amenity_list
+        for value in models.storage.all(Review).values():
+            if value.place_id == self.id:
+                reviews_list.append(value)
+        return reviews_list
 
-        @amenities.setter
-        """Set linked Amenities."""
-        def amenities(self, value):
-            if type(value) == Amenity:
+    @property
+    def amenities(self):
+        """Get associated Amenities."""
+        amenity_list = []
+
+        for value in models.storage.all(Amenity).values():
+            if value.id in self.amenity_ids:
+                amenity_list.append(value)
+        return amenity_list
+
+    @amenities.setter
+    def amenities(self, value):
+        """Add associated Amenities."""
+        if type(value) is Amenity:
+            if value.id not in self.amenity_ids:
                 self.amenity_ids.append(value.id)

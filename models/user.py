@@ -1,17 +1,15 @@
 #!/usr/bin/python3
-"""This module defines a class User"""
-from models.base_model import Base
-from models.base_model import BaseModel
-from sqlalchemy import Column
-from sqlalchemy import String
+"""Module defines a class User."""
+from models.base_model import Base, BaseModel
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
-    """This class represents a user for a MySQL database.
+    """A user in the HBNB model.
 
     Inherits from SQLAlchemy Base and links to the MySQL table users.
-    Attributes:
+    Attributes_:
         __tablename__ (str): The name of the MySQL table to store users.
         email: (sqlalchemy String): The user's email address.
         password (sqlalchemy String): The user's password.
@@ -20,10 +18,14 @@ class User(BaseModel, Base):
         places (sqlalchemy relationship): The User-Place relationship.
         reviews (sqlalchemy relationship): The User-Review relationship.
     """
+
     __tablename__ = "users"
+
     email = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
-    places = relationship("Place", cascade="all", backref="user")
-    reviews = relationship("Review", cascade="all", backref="user")
+    places = relationship("Place", cascade="all, delete, delete-orphan",
+                          backref="user")
+    reviews = relationship("Review", cascade="all, delete, delete-orphan",
+                           backref="user")
