@@ -4,7 +4,7 @@ from typing import TextIO
 from models.engine.file_storage import FileStorage
 
 
-def clear_stream(stream: TextIO):
+def clear_stream(stream: TextIO) -> None:
     """Clear the contents of a given stream.
 
     Args_:
@@ -15,7 +15,7 @@ def clear_stream(stream: TextIO):
         stream.truncate(0)
 
 
-def delete_file(file_path: str):
+def delete_file(file_path: str) -> None:
     """Remove file if it exists.
 
     Args_:
@@ -25,7 +25,7 @@ def delete_file(file_path: str):
         os.unlink(file_path)
 
 
-def reset_store(store: FileStorage, file_path='file.json'):
+def reset_store(store: FileStorage, file_path: str = 'file.json') -> None:
     """Reset the items in the given store.
 
     Args_:
@@ -38,7 +38,7 @@ def reset_store(store: FileStorage, file_path='file.json'):
         store.reload()
 
 
-def read_text_file(file_name):
+def read_text_file(file_name: str) -> str:
     """Read the contents of a given file.
 
     Args_:
@@ -55,7 +55,7 @@ def read_text_file(file_name):
     return ''.join(lines)
 
 
-def write_text_file(file_name, text):
+def write_text_file(file_name: str, text: str) -> None:
     """Write text to a given file.
 
     Args_:

@@ -1,69 +1,142 @@
 #!/usr/bin/python3
-""" """
-from tests.test_models.test_base_model import TestBasemodel
+"""Place test module."""
+import os
+import unittest
+
 from models.place import Place
+from tests.test_models.test_base_model import TestBasemodel
 
 
-class test_Place(TestBasemodel):
-    """Place model test cases."""
+class TestPlace(TestBasemodel):
+    """Represents the tests for the Place model."""
 
     def __init__(self, *args, **kwargs):
-        """Initialize test class."""
+        """Initializes the test class."""
         super().__init__(*args, **kwargs)
         self.name = "Place"
         self.value = Place
 
     def test_city_id(self):
-        """Evaluate type of city id."""
+        """Tests the type of city_id."""
         new = self.value()
-        self.assertEqual(type(new.city_id), str)
+        self.assertEqual(
+            type(new.city_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "City ID should be str if not using DB storage"
+        )
 
     def test_user_id(self):
-        """Evaluate type of user id."""
+        """Tests the type of user_id."""
         new = self.value()
-        self.assertEqual(type(new.user_id), str)
+        self.assertEqual(
+            type(new.user_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "User ID should be str if not using DB storage"
+        )
 
     def test_name(self):
-        """Evaluate type of name."""
+        """Tests the type of name."""
         new = self.value()
-        self.assertEqual(type(new.name), str)
+        self.assertEqual(
+            type(new.name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Name should be str if not using DB storage"
+        )
 
     def test_description(self):
-        """Evaluate type of description of object."""
+        """Tests the type of description."""
         new = self.value()
-        self.assertEqual(type(new.description), str)
+        self.assertEqual(
+            type(new.description),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Description should be str if not using DB storage"
+        )
 
     def test_number_rooms(self):
-        """Evaluate type of number of rooms."""
+        """Tests the type of number_rooms."""
         new = self.value()
-        self.assertEqual(type(new.number_rooms), int)
+        self.assertEqual(
+            type(new.number_rooms),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Number of rooms should be int if not using DB storage"
+        )
 
     def test_number_bathrooms(self):
-        """Evaluate type of number_bathrooms value."""
+        """Tests the type of number_bathrooms."""
         new = self.value()
-        self.assertEqual(type(new.number_bathrooms), int)
+        self.assertEqual(
+            type(new.number_bathrooms),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Number of bathrooms should be int if not using DB storage"
+        )
 
     def test_max_guest(self):
-        """Evaluate type of maxguest value."""
+        """Tests the type of max_guest."""
         new = self.value()
-        self.assertEqual(type(new.max_guest), int)
+        self.assertEqual(
+            type(new.max_guest),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Max guests should be int if not using DB storage"
+        )
 
     def test_price_by_night(self):
-        """Evaluate type of price_by_night."""
+        """Tests the type of price_by_night."""
         new = self.value()
-        self.assertEqual(type(new.price_by_night), int)
+        self.assertEqual(
+            type(new.price_by_night),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Price by night should be int if not using DB storage"
+        )
 
     def test_latitude(self):
-        """Evaluate type of latitude."""
+        """Tests the type of latitude."""
         new = self.value()
-        self.assertEqual(type(new.latitude), float)
+        self.assertEqual(
+            type(new.latitude),
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Latitude should be float if not using DB storage"
+        )
 
     def test_longitude(self):
-        """Evaluate type of longitude."""
+        """Tests the type of longitude."""
         new = self.value()
-        self.assertEqual(type(new.latitude), float)
+        self.assertEqual(
+            type(new.longitude),
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None),
+            "Longitude should be float if not using DB storage"
+        )
 
     def test_amenity_ids(self):
-        """Evaluate type of  """
+        """Tests the type of amenity_ids."""
         new = self.value()
-        self.assertEqual(type(new.amenity_ids), list)
+        self.assertEqual(
+            type(new.amenity_ids),
+            list,
+            "Amenity IDs should be a list"
+        )
+
+    @unittest.skipIf(
+        os.getenv('HBNB_TYPE_STORAGE') == 'db',
+        "Skip test for DB storage"
+    )
+    def test_city_id_file_storage(self):
+        """Test city_id type for FileStorage."""
+        new = self.value()
+        self.assertEqual(
+            type(new.city_id),
+            str,
+            "City ID should be str for FileStorage"
+        )
+
+    @unittest.skipIf(
+        os.getenv('HBNB_TYPE_STORAGE') == 'db',
+        "Skip test for DB storage"
+    )
+    def test_user_id_file_storage(self):
+        """Test user_id type for FileStorage."""
+        new = self.value()
+        self.assertEqual(
+            type(new.user_id),
+            str,
+            "User ID should be str for FileStorage"
+        )

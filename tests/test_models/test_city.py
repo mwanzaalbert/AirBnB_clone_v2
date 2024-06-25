@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 """Module of city database values test cases."""
-from tests.test_models.test_base_model import TestBasemodel
+import os
+import unittest
+
 from models.city import City
+from tests.test_models.test_base_model import TestBasemodel
 
 
-class test_City(TestBasemodel):
-    """City model test cases."""
+class TestCity(TestBasemodel):
+    """Represents the tests for the City model."""
 
     def __init__(self, *args, **kwargs):
         """Initialize the test class."""
@@ -14,11 +17,15 @@ class test_City(TestBasemodel):
         self.value = City
 
     def test_state_id(self):
-        """Evaluate the type of state_id."""
+        """Test the type and default value of state_id."""
         new = self.value()
         self.assertEqual(type(new.state_id), str)
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.assertIsNone(new.state_id)
 
     def test_name(self):
-        """Tests the type of name."""
+        """Test the type and default value of name."""
         new = self.value()
         self.assertEqual(type(new.name), str)
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.assertIsNone(new.name)

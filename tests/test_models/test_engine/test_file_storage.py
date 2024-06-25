@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-""" Module for testing file storage."""
-import unittest
+""" Module for testing file storage"""
 import os
+import unittest
 
 from models import storage
 from models.base_model import BaseModel
@@ -9,38 +9,32 @@ from models.base_model import BaseModel
 
 @unittest.skipIf(
     os.getenv('HBNB_TYPE_STORAGE') == 'db', 'FileStorage test')
-class test_fileStorage(unittest.TestCase):
-    """ Class to test the file storage method."""
+class TestFileStorage(unittest.TestCase):
+    """ Class to test the file storage method """
 
     def setUp(self):
-        """ Set up test environment."""
-        del_list = []
-        for key in storage.all().keys():
-            del_list.append(key)
-        for key in del_list:
-            del storage.all()[key]
+        """ Set up test environment """
+        storage.reload()
 
     def tearDown(self):
-        """ Remove storage file at end of tests."""
+        """ Remove storage file at end of tests """
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_obj_list_empty(self):
-        """ __objects is initially empty."""
+        """ __objects is initially empty """
         self.assertEqual(len(storage.all()), 0)
 
     def test_new(self):
         """ New object is correctly added to __objects """
         new = BaseModel()
         new.save()
-        for obj in storage.all().values():
-            temp = obj
-        self.assertTrue(temp is obj)
+        self.assertIn(new, storage.all().values())
 
     def test_all(self):
-        """ __objects is properly returned."""
+        """ __objects is properly returned """
         new = BaseModel()
         temp = storage.all()
         self.assertIsInstance(temp, dict)
@@ -61,7 +55,7 @@ class test_fileStorage(unittest.TestCase):
     def test_save(self):
         """ FileStorage save method """
         new = BaseModel()
-        storage.save()
+        new.save()
         self.assertTrue(os.path.exists('file.json'))
 
     def test_reload(self):
