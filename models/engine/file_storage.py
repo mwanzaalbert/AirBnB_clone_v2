@@ -20,8 +20,8 @@ class FileStorage:
         """
         if cls:
             return {key: value for key,
-                    value in self.__objects.items() if type(value) is cls}
-        return self.__objects
+                    value in self.__objects.items() if isinstance(value, cls)}
+        return FileStorage.__objects
 
     def new(self, obj):
         """Add new object to storage dictionary."""
