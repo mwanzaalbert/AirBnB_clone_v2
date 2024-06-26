@@ -33,7 +33,7 @@ class FileStorage:
 
     def save(self):
         """Save storage dictionary to file."""
-        with open(self.__file_path, 'w', encoding="utf-8") as file:
+        with open(FileStorage.__file_path, 'w', encoding="utf-8") as file:
             temp = {key: value.to_dict() for key,
                     value in self.__objects.items()}
 
@@ -57,9 +57,9 @@ class FileStorage:
             'Place': Place,
             'Review': Review
         }
-        if os.path.isfile(self.__file_path):
+        if os.path.isfile(FileStorage.__file_path):
             # try:
-            with open(self.__file_path, 'r', encoding="utf-8") as file:
+            with open(FileStorage.__file_path, 'r', encoding="utf-8") as file:
                 data = json.load(file)
                 for key, value in data.items():
                     self.all()[key] = classes[value['__class__']](**value)
