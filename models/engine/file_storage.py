@@ -5,13 +5,14 @@ import json
 
 class FileStorage:
     """Manage storage of hbnb models in JSON format."""
+
     __file_path = 'file.json'
     __objects = {}
 
     def all(self, cls=None):
         """
         Return a dictionary of models currently in storage.
-        
+
         If a class is specified, return a dictionary of objects of that class.
         """
         if cls:
@@ -61,5 +62,5 @@ class FileStorage:
                 del self.__objects[key]
 
     def close(self):
-        """Call the reload method for deserializing the JSON file to objects."""
+        """Call the reload for deserializing the JSON file to objects."""
         self.reload()
