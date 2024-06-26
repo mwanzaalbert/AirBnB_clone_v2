@@ -9,19 +9,13 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-from importlib import import_module
 
 
 class FileStorage:
-    """Manages storage of hbnb models in JSON format."""
+    """Manage storage of hbnb models in JSON format."""
 
     __file_path = 'file.json'
     __objects = dict()
-
-    # model_classes =
-
-    # def __init__(self):
-    #     """Initialize instance."""
 
     def all(self, cls=None):
         """
@@ -42,7 +36,7 @@ class FileStorage:
         key = f"{obj.__class__.__name__}.{obj.id}"
 
         # # Update __objects dictionary with the object
-        self.__objects[key] = obj
+        self.all().update({key: obj})
 
     def save(self):
         """Save storage dictionary to file."""
