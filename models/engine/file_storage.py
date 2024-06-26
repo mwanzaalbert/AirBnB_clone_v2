@@ -67,10 +67,6 @@ class FileStorage:
             with open(self.__file_path, 'r', encoding="utf-8") as file:
                 data = json.load(file)
                 for key, value in data.items():
-                    # cls_name = v['__class__']
-                    # cls = self.model_classes.get(cls_name)
-                    # if cls:
-                    #     self.__objects[k] = cls(**v)
                     self.all()[key] = classes[value['__class__']](**value)
         # except FileNotFoundError:
             # pass
@@ -79,7 +75,8 @@ class FileStorage:
         """Remove obj from __objects."""
         if obj:
             key = f"{obj.__class__.__name__}.{obj.id}"
-            self.__objects.pop(key, None)
+            if key in self.obj.keys():
+                self.__objects.pop(key, None)
 
     def close(self):
         """Call the reload method."""
