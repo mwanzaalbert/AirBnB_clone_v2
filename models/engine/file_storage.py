@@ -53,7 +53,7 @@ class FileStorage:
 
     def save(self):
         """Save storage dictionary to file."""
-        with open(self.__file_path, 'a', encoding="utf-8") as file:
+        with open(self.__file_path, 'w', encoding="utf-8") as file:
             temp = {key: value.to_dict() for key,
                     value in self.__objects.items()}
 
