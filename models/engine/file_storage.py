@@ -1,7 +1,13 @@
 #!/usr/bin/python3
 """Module defines a class to manage file storage for hbnb clone."""
 import json
-
+from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 class FileStorage:
     """Manage storage of hbnb models in JSON format."""
@@ -16,6 +22,8 @@ class FileStorage:
         If a class is specified, return a dictionary of objects of that class.
         """
         if cls:
+            if type(cls) is str:
+                cls = eval(cls)
             return {key: value for key, value in FileStorage.__objects.items()
                     if isinstance(value, cls)}
         return self.__objects
