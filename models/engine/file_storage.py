@@ -53,25 +53,24 @@ class FileStorage:
 
     def save(self):
         """Save storage dictionary to file."""
-        with open(self.__file_path, 'w', encoding="utf-8") as f:
+        with open(self.__file_path, 'w', encoding="utf-8") as file:
             temp = {k: v.to_dict() for k, v in self.__objects.items()}
 
-            json.dump(temp, f)
+            json.dump(temp, file)
 
     def reload(self):
         """Load storage dictionary from file."""
-        classes = self.model_classes
-
-        try:
-            with open(self.__file_path, 'r', encoding="utf-8") as f:
-                data = json.load(f)
+        if os.path.isfile(self.__file_path):
+            # try:
+            with open(self.__file_path, 'r', encoding="utf-8") as file:
+                data = json.load(file)
                 for k, v in data.items():
                     cls_name = v['__class__']
                     cls = self.model_classes.get(cls_name)
                     if cls:
                         self.__objects[k] = cls(**v)
-        except FileNotFoundError:
-            pass
+        # except FileNotFoundError:
+            # pass
 
     def delete(self, obj=None):
         """Remove obj from __objects."""
