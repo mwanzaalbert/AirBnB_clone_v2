@@ -17,7 +17,7 @@ class FileStorage:
         if cls:
             return {key: value for key, value in FileStorage.__objects.items()
                     if isinstance(value, cls)}
-        return self.__objects.__objects
+        return self.__objects
 
     def new(self, obj):
         """Add new object to storage dictionary."""
@@ -58,7 +58,7 @@ class FileStorage:
         if obj:
             key = obj.to_dict()['__class__'] + '.' + obj.id
             if key in FileStorage.__objects:
-                del self.__objects.__objects[key]
+                del self.__objects[key]
 
     def close(self):
         """Call the reload method for deserializing the JSON file to objects."""
