@@ -73,12 +73,11 @@ class FileStorage:
 
     def delete(self, obj=None):
         """Remove obj from __objects."""
-        if not obj:
-            return
-
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        if key in self.__objects.keys():
-            self.__objects.pop(key, None)
+        if obj:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+            if key in self.__objects.keys():
+                # self.__objects.pop(key, None)
+                del self.__objects[key]
 
     def close(self):
         """Call the reload method."""
