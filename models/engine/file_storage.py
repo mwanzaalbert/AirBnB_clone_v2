@@ -18,15 +18,7 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = dict()
 
-    model_classes = {
-        'BaseModel': BaseModel,
-        'User': User,
-        'State': State,
-        'City': City,
-        'Amenity': Amenity,
-        'Place': Place,
-        'Review': Review
-    }
+    # model_classes =
 
     # def __init__(self):
     #     """Initialize instance."""
@@ -40,8 +32,8 @@ class FileStorage:
                 type. Otherwise, the __objects dictionary is returned.
         """
         if cls:
-            return {k: v for k, v in self.__objects.items() if isinstance(v,
-                                                                          cls)}
+            return {key: value for key,
+                    value in self.__objects.items() if type(value) is cls}
         return self.__objects
 
     def new(self, obj):
@@ -62,7 +54,15 @@ class FileStorage:
 
     def reload(self):
         """Load storage dictionary from file."""
-        classes = self.model_classes
+        classes = {
+            'BaseModel': BaseModel,
+            'User': User,
+            'State': State,
+            'City': City,
+            'Amenity': Amenity,
+            'Place': Place,
+            'Review': Review
+        }
         if os.path.isfile(self.__file_path):
             # try:
             with open(self.__file_path, 'r', encoding="utf-8") as file:
