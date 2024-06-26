@@ -61,15 +61,17 @@ class FileStorage:
 
     def reload(self):
         """Load storage dictionary from file."""
+        classes = self.model_classes
         if os.path.isfile(self.__file_path):
             # try:
             with open(self.__file_path, 'r', encoding="utf-8") as file:
                 data = json.load(file)
-                for k, v in data.items():
-                    cls_name = v['__class__']
-                    cls = self.model_classes.get(cls_name)
-                    if cls:
-                        self.__objects[k] = cls(**v)
+                for key, value in data.items():
+                    # cls_name = v['__class__']
+                    # cls = self.model_classes.get(cls_name)
+                    # if cls:
+                    #     self.__objects[k] = cls(**v)
+                    self.all()[key] = classes[value['__class__']](**value)
         # except FileNotFoundError:
             # pass
 
