@@ -39,9 +39,7 @@ class FileStorage:
                 type. Otherwise, the __objects dictionary is returned.
         """
         if cls:
-            return {k: v for k, v in self.__objects.items() if isinstance(v,
-                                                                          cls)}
-        return self.__objects
+            return {k: v for k, v in self.__objects.items() if type(v) is cls}
 
     def new(self, obj):
         """Add new object to storage dictionary."""
