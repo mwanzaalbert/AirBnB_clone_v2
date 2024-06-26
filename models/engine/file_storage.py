@@ -2,13 +2,6 @@
 """Module defines a class to manage file storage for hbnb clone."""
 import os
 import json
-from models.base_model import BaseModel
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
 
 
 class FileStorage:
@@ -48,6 +41,13 @@ class FileStorage:
 
     def reload(self):
         """Load storage dictionary from file."""
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
         classes = {
             'BaseModel': BaseModel,
             'User': User,
