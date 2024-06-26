@@ -18,17 +18,18 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = dict()
 
-    def __init__(self):
-        """Initialize instance."""
-        self.model_classes = {
-            'BaseModel': BaseModel,
-            'User': User,
-            'State': State,
-            'City': City,
-            'Amenity': Amenity,
-            'Place': Place,
-            'Review': Review
-        }
+    model_classes = {
+        'BaseModel': BaseModel,
+        'User': User,
+        'State': State,
+        'City': City,
+        'Amenity': Amenity,
+        'Place': Place,
+        'Review': Review
+    }
+
+    # def __init__(self):
+    #     """Initialize instance."""
 
     def all(self, cls=None):
         """
