@@ -28,7 +28,7 @@ class City(BaseModel, Base):
         if os.getenv('HBNB_TYPE_STORAGE') != 'db':
             self.state_id = kwargs.get('state_id', "")
             self.name = kwargs.get('name', "")
-            self.validate_attributes()
+#             self.validate_attributes()
 
     def validate_attributes(self):
         """Validate the state_id and name attributes for non-DB storage."""
