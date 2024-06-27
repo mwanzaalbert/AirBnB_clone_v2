@@ -9,6 +9,7 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
+
 class FileStorage:
     """Manage storage of hbnb models in JSON format."""
 
@@ -32,7 +33,6 @@ class FileStorage:
         """Add new object to storage dictionary."""
         key = f"{obj.__class__.__name__}.{obj.id}"
         self.__objects[key] = obj
-#         self.__objects.update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
         """Save storage dictionary to file."""
@@ -63,14 +63,13 @@ class FileStorage:
                     cls_name = val['__class__']
                     if cls_name in classes:
                         self.__objects[key] = classes[cls_name](**val)
-                        
+
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
         """Remove object from storage dictionary."""
         if obj:
-#             key = obj.to_dict()['__class__'] + '.' + obj.id
             key = f"{obj.__class__.__name__}.{obj.id}"
             if key in FileStorage.__objects:
                 del self.__objects[key]
