@@ -20,7 +20,8 @@ def clear_stream(stream):
 class TestHBNBCommand(unittest.TestCase):
     """Represents the test class for the HBNBCommand class."""
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', 'FileStorage test')
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     'FileStorage test')
     def test_fs_create(self):
         """Tests the create command with the file storage."""
         with patch('sys.stdout', new=StringIO()) as cout:
