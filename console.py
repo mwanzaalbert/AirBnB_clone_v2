@@ -181,7 +181,8 @@ class HBNBCommand(cmd.Cmd):
     def help_create(self):
         """Help information for the create method."""
         print("Creates a class of any type")
-        print("[Usage]: create <className> <param1=value1> <param2=value2>...\n")
+        print("[Usage]: create <className> <param1=value1>" +
+              " <param2=value2>...\n")
 
     def do_show(self, args):
         """Show an individual object."""
@@ -286,7 +287,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: count <class_name>\n")
 
     def do_update(self, args):
-        """Updates a certain object with new info."""
+        """Update a certain object with new info."""
         c_name = c_id = att_name = att_val = kwargs = ''
 
         # isolate cls from id/args, ex: (<cls>, delims, <id/args>)
@@ -317,7 +318,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and isinstance(eval(args[2]), dict):
+        if '{' in args[2] and '}' in args[2] and isinstance(
+                eval(args[2]), dict):
             kwargs = eval(args[2])
             args = []  # reformat kwargs into list for ease of parsing
             for k, v in kwargs.items():
@@ -355,7 +357,8 @@ class HBNBCommand(cmd.Cmd):
     def help_update(self):
         """Help information for the update command."""
         print("Updates an object with new information")
-        print("Usage: update <class name> <id> <attribute name> <attribute value>\n")
+        print("Usage: update <class name> <id> <attribute name>" +
+              " <attribute value>\n")
 
 
 if __name__ == "__main__":
