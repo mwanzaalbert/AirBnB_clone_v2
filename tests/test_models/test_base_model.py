@@ -3,9 +3,9 @@
 import unittest
 import os
 import json
-import datetime
 
 from uuid import UUID
+from datetime import datetime
 from models.base_model import BaseModel, Base
 from models import storage
 
@@ -20,17 +20,18 @@ class test_basemodel(unittest.TestCase):
         self.value = BaseModel
 
     def setUp(self):
-        """ """
+        """Perform some operations before the tests are run."""
         pass
 
     def tearDown(self):
+        """Perform some operations after the tests are run."""
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_default(self):
-        """Evaluate the type of value stored."""
+        """Test the type of value stored."""
         i = self.value()
         self.assertEqual(type(i), self.value)
 
@@ -79,17 +80,17 @@ class test_basemodel(unittest.TestCase):
         self.assertIn('updated_at', self.value().to_dict())
         # Tests if to_dict contains added attributes
         mdl = self.value()
-        mdl.firstname = 'Celestine'
-        mdl.lastname = 'Akpanoko'
+        mdl.firstname = 'Barry'
+        mdl.lastname = 'Allen'
         self.assertIn('firstname', mdl.to_dict())
         self.assertIn('lastname', mdl.to_dict())
-        self.assertIn('firstname', self.value(firstname='Celestine').to_dict())
-        self.assertIn('lastname', self.value(lastname='Akpanoko').to_dict())
+        self.assertIn('firstname', self.value(firstname='Barry').to_dict())
+        self.assertIn('lastname', self.value(lastname='Allen').to_dict())
         # Tests to_dict datetime attributes if they are strings
         self.assertIsInstance(self.value().to_dict()['created_at'], str)
         self.assertIsInstance(self.value().to_dict()['updated_at'], str)
         # Tests to_dict output
-        datetime_now = datetime.today()
+        datetime_now = datetime.now()
         mdl = self.value()
         mdl.id = '012345'
         mdl.created_at = mdl.updated_at = datetime_now
@@ -102,18 +103,18 @@ class test_basemodel(unittest.TestCase):
         self.assertDictEqual(mdl.to_dict(), to_dict)
         if os.getenv('HBNB_TYPE_STORAGE') != 'db':
             self.assertDictEqual(
-                self.value(id='u-b34', age=13).to_dict(),
+                self.value(id='u-b40', age=13).to_dict(),
                 {
                     '__class__': mdl.__class__.__name__,
-                    'id': 'u-b34',
+                    'id': 'u-b40',
                     'age': 13
                 }
             )
             self.assertDictEqual(
-                self.value(id='u-b34', age=None).to_dict(),
+                self.value(id='u-b40', age=None).to_dict(),
                 {
                     '__class__': mdl.__class__.__name__,
-                    'id': 'u-b34',
+                    'id': 'u-b40',
                     'age': None
                 }
             )
@@ -148,25 +149,24 @@ class test_basemodel(unittest.TestCase):
         self.assertTrue(hasattr(new, 'Name'))
 
     def test_id(self):
-        """ """
+        """Test the type of id."""
         new = self.value()
         self.assertEqual(type(new.id), str)
 
     def test_created_at(self):
-        """ """
+        """Test the type of created_at."""
         new = self.value()
-        self.assertEqual(type(new.created_at), datetime.datetime)
+        self.assertEqual(type(new.created_at), datetime)
 
     def test_updated_at(self):
         """ """
         new = self.value()
-        self.assertEqual(type(new.updated_at), datetime.datetime)
-        n = new.to_dict()
-        new = BaseModel(**n)
-        self.assertFalse(new.created_at == new.updated_at)
+        self.assertEqual(type(new.updated_at), datetime)
+        new.save()
+        self.assertNotEqual(new.created_at, new.updated_at)
 
     def test_init(self):
-        """Evaluate initialization of the model class."""
+        """Test the initialization of the model class."""
         self.assertIsInstance(self.value(), BaseModel)
         if self.value is not BaseModel:
             self.assertIsInstance(self.value(), Base)
